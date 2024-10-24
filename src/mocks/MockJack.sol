@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 interface ReclaimHide {
     struct CompleteClaimData {
         bytes32 identifier;
@@ -22,8 +26,10 @@ interface ReclaimHide {
     function verifyProof(Proof memory proof) external view returns (bool);
 }
 
-contract MockJack {
+contract MockJack is ERC20 {
+    using SafeERC20 for IERC20;
     // Aligned
+
     error InvalidElf(bytes32 provingSystemAuxDataCommitment);
     error ProofGeneratorAddrMismatch();
     error StaticCallFailed();
@@ -31,6 +37,9 @@ contract MockJack {
     error PubInputCommitmentMismatch();
 
     event FillOfframp(bytes32 indexed requestOfframpId, address receiver, bytes32 proof, bytes32 reclaimProof);
+
+    event Mint(address indexed user, uint256 amount);
+    event Withdraw(address indexed user, uint256 amount);
 
     struct PublicValuesStruct {
         OfframpRequestParams offrampRequestParams;
@@ -50,8 +59,22 @@ contract MockJack {
     address public constant paymentServiceAddr = 0x815aeCA64a974297942D2Bbf034ABEe22a38A003;
     // bytes32 public immutable elfCommitment;
 
-    constructor() {
+    address public constant underlyingUSD = 0x8feE246199e162AC1b4969aD7ab32Ae3c4474102;
+
+    constructor() ERC20("jackUSD", "jackUSD") {
         // elfCommitment = _elfCommitment;
+    }
+
+    function mint(uint256 amount) public {
+        _mint(msg.sender, amount);
+        IERC20(underlyingUSD).safeTransferFrom(msg.sender, address(this), amount);
+        emit Mint(msg.sender, amount);
+    }
+
+    function withdraw(uint256 amount) public {
+        _burn(msg.sender, amount);
+        IERC20(underlyingUSD).safeTransfer(msg.sender, amount);
+        emit Withdraw(msg.sender, amount);
     }
 
     function fillOfframp(
