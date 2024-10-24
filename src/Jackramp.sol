@@ -97,7 +97,7 @@ contract Jackramp is ERC20, ReentrancyGuardTransient {
         address _paymentServiceAddr,
         bytes32 _elfCommitment,
         address _reclaimHide
-    ) ERC20("OffUSD", "offUSD") {
+    ) ERC20("jackUSD", "jackUSD") {
         underlyingUSD = _underlyingUSD;
         alignedServiceManager = _alignedServiceManager;
         paymentServiceAddr = _paymentServiceAddr;
