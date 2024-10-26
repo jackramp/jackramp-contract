@@ -130,7 +130,9 @@ contract Jackramp is ERC20, ReentrancyGuardTransient {
         params.user = msg.sender;
         params.amountRealWorld = params.amount;
 
-        IERC20(address(this)).safeTransferFrom(msg.sender, address(this), params.amount);
+        // IERC20(address(this)).safeTransferFrom(msg.sender, address(this), params.amount);
+
+        _transfer(msg.sender, address(this), params.amount);
 
         offrampRequests[requestOfframpId] = OfframpRequestStorage({
             user: params.user,
