@@ -216,4 +216,8 @@ contract Jackramp is ERC20, ReentrancyGuardTransient {
 
         emit FillOfframp(requestOfframpId, msg.sender, fullHash, publicValues.proof.hashedClaimInfo);
     }
+
+    function decimals() public pure override returns (uint8) {
+        return 6;
+    }
 }
