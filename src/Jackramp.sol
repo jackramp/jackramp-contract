@@ -170,7 +170,7 @@ contract Jackramp is ERC20, ReentrancyGuardTransient {
         // decode publicValuesStruct
         PublicValuesStruct memory publicValues = abi.decode(pubInputBytes, (PublicValuesStruct));
 
-        if (usedProofs[fullHash]) revert ProofAlreadyUsed(fullHash);
+        if (usedProofs[proofCommitment]) revert ProofAlreadyUsed(proofCommitment);
         if (usedReclaimProofs[publicValues.proof.hashedClaimInfo]) {
             revert ReclaimProofAlreadyUsed(publicValues.proof.hashedClaimInfo);
         }
@@ -195,7 +195,7 @@ contract Jackramp is ERC20, ReentrancyGuardTransient {
         if (!proofIsIncludedBool) revert ProofNotIncludedInBatch();
 
         // verify Reclaim proof
-        if (!ReclaimHide(reclaimHide).verifyProof(publicValues.proof)) revert InvalidReclaimProof();
+        //if (!ReclaimHide(reclaimHide).verifyProof(publicValues.proof)) revert InvalidReclaimProof();
 
         bytes32 requestOfframpId = keccak256(abi.encode(publicValues.offrampRequestParams));
 
