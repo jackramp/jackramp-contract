@@ -1,5 +1,8 @@
 ## Jackramp / jackUSD
 
+### Documentation
+For more detailed documentation, please refer to the following [Gitbook link](https://kbaji.gitbook.io/jackramp).
+
 ### Build
 
 ```shell
